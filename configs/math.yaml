@@ -1,0 +1,93 @@
+# Smoke config (math500 + DeepSeek-R1-Distill-Qwen-1.5B)
+#
+# Full pipeline:
+#   CUDA_VISIBLE_DEVICES=0 conda run -n easysteer python run.py --config configs/default mine
+#   CUDA_VISIBLE_DEVICES=0 conda run -n easysteer python run.py --config configs/default --run-id latest select
+#   CUDA_VISIBLE_DEVICES=0 conda run -n easysteer python run.py --config configs/default --run-id latest memory
+#   CUDA_VISIBLE_DEVICES=0 conda run -n easysteer python run.py --config configs/default --run-id latest eval
+#
+# Notes:
+# - math500: recommended budget >= 4096 to reduce truncation.
+# - If Stage I mining yields very few candidates, first increase offline_mine.K or offline_mine.max_new_tokens.
+
+seed: 0
+
+model:
+  name_or_path: "huggingface_models/DeepSeek-R1-Distill-Qwen-1.5B"
+  tensor_parallel_size: 1
+  enforce_eager: true
+  enable_chunked_prefill: false
+  dtype: "bfloat16"
+  gpu_memory_utilization: 0.8
+  max_model_len: 16384
+  max_num_seqs: 256
+
+task:
+  data_root: "datasets"
+  dataset: "math500"
+  train_split: "test"
+  eval_split: "test"
+  max_train_examples: 100
+  max_eval_examples: 400
+
+prompt:
+  template: "math_0shot"
+
+decode:
+  temperature: 0.0
+  top_p: 1.0
+  max_new_tokens: 16384
+  logprobs: 1
+
+control_points:
+  M: 8
+
+offline_mine:
+  K: 8
+  batch_size_examples: 64
+  K_pos: 2
+  K_neg: 3
+  temperature: 0.7
+  top_p: 0.95
+  candidate_layers: [0.6]
+  max_new_tokens: 16384
+  eta0: 0.01
+  keep_top_C: 128
+  require_correct_and_incorrect: true
+  min_correct_rollouts: 1
+  min_incorrect_rollouts: 1
+  pos_source: "rollout_or_gold"
+
+offline_select:
+  B: 256
+  lambda_diversity: 0.5
+  epsilon: 0.0001
+  method: "dpp"
+  random_seed: 0
+  min_per_control_point: 8
+
+offline_memory:
+  normalize_keys: true
+
+online:
+  variant: "stir"
+  # Segment-wise batching across examples (0 = all eval examples in one batch).
+  batch_size_examples: 128
+  k_retrieve: 8
+  L: 4
+  probe_tokens: 4
+  beta: 2.0
+  rho: 0.1
+  k_scale: 1.0
+  tau_null: 0.0
+  min_sim: 0.0
+  min_entries: 1
+  protocol: "P1"
+
+eval:
+  methods: ["greedy", "stir"]
+  ablations: []
+
+outputs:
+  root_dir: "outputs"
+  run_name: "math500_deepseek_1p5b"
