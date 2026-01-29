@@ -24,19 +24,6 @@ Extensive experiments on six benchmarks (including AIME 24/25, AMC 23, MATH-500,
 | -------------------- | ------------- | ----------- | ------------------------------------- |
 | **Vanilla CoT**      | 45.9%         | 1,359       | Standard Autoregressive Generation    |
 | **Self-Consistency** | 45.2%         | 2,084       | Ensemble Sampling (High Cost)         |
-| **SEAL (Static)**    | 45.2%         | 1,303       | Static Activation Steering            |
-| **STIR (Ours)**      | **53.4%**     | **875**     | **Dynamic Latent Trajectory Control** |
-
-*STIR (*$k_{scale}=0.75$*) achieves a **+7.5%** accuracy gain while reducing token usage by **~36%** compared to Vanilla CoT on Qwen2.5 3B-Instruct. See Table 1 in the paper for full results across all models.*
-
-## 🔥 Main Results
-
-Extensive experiments on six benchmarks (including AIME 24/25, AMC 23, MATH-500, ARC-Challenge and OpenBookQA) demonstrate that STIR establishes a new accuracy-efficiency Pareto frontier. The table below highlights performance on **Qwen2.5 3B-Instruct**:
-
-| Method               | Avg. Accuracy | Avg. Tokens | Mechanism                             |
-| -------------------- | ------------- | ----------- | ------------------------------------- |
-| **Vanilla CoT**      | 45.9%         | 1,359       | Standard Autoregressive Generation    |
-| **Self-Consistency** | 45.2%         | 2,084       | Ensemble Sampling (High Cost)         |
 | **Self-Discover**    | 46.4%         | 1,075       | Structure-Driven Prompting            |
 | **DEER**             | 44.4%         | 1,278       | Dynamic Early Exit                    |
 | **SEAL (Static)**    | 45.2%         | 1,303       | Static Activation Steering            |
