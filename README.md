@@ -175,7 +175,7 @@ The behavior of STIR is fully controlled via YAML configuration files (e.g., `co
 
 - **`online`**:
   - `k_retrieve`: Number of candidate tools to retrieve per step.
-  - `probe_tokens`: Number of tokens generated during the Preview phase to validate tool utility.
+  - `probe_tokens`: Number of tokens generated during the preview phase to validate tool utility.
   - `k_scale`: Injection strength coefficient for the steering vector.
   - `tau_null`: Anchor-based gating threshold.
 
