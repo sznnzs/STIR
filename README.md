@@ -40,8 +40,8 @@ The codebase is organized as follows:
 ├── configs/                  # Experiment configurations (YAML format)
 ├── stir/                     # Core source code
 │   ├── offline/              # Offline Pipeline: Mining & Library Construction
-│   │   ├── stage1.py         # Stage I: Differential Intrinsic Action Induction (Contrastive Rollouts)
-│   │   ├── stage2.py         # Stage II: Sparse Control Basis Construction (DPP Selection)
+│   │   ├── stage1.py         # Stage I: Contrastive Tool Induction (Contrastive Rollouts)
+│   │   ├── stage2.py         # Stage II: Sparse Tool Library Construction (DPP Selection)
 │   │   ├── stage3.py         # Stage III: Episodic Memory Indexing (L2 Normalized Keys)
 │   │   └── hf_states.py      # Utils: Efficient hidden state extraction from HF models
 │   ├── online/               # Online Inference: Dynamic Controller
@@ -111,7 +111,7 @@ bash scripts/run_single_dataset.sh configs/math.yaml 0
 
 You can run each stage individually using `run.py`. This is useful for debugging intermediate results or tuning hyperparameters.
 
-### Stage 1: Differential Intrinsic Action Induction (Mine)
+### Stage 1: Contrastive Tool Induction (Mine)
 
 Harvest latent reasoning successes by comparing high-reward and low-reward stochastic rollouts.
 
@@ -121,7 +121,7 @@ python run.py --config configs/math.yaml mine
 
 - **Output**: `outputs/<run_name>/<run_id>/mine/candidates.jsonl` (Raw candidate vectors)
 
-### Stage 2: Sparse Control Basis Construction (Select)
+### Stage 2: Sparse Tool Library Construction (Select)
 
 Filter raw candidates into a geometrically diverse tool library using Determinantal Point Processes (DPP).
 
@@ -142,7 +142,7 @@ python run.py --config configs/math.yaml --run-id latest memory
 
 - **Output**: `outputs/<run_name>/<run_id>/memory/keys.npy`
 
-### Stage 4: Value-Modulated Trajectory Intervention (Eval)
+### Stage 4: Lookahead-Gated Intervention (Eval)
 
 Launch the STIR controller for inference evaluation.
 
